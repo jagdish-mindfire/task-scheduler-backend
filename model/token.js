@@ -15,6 +15,11 @@ const TokenSchema = mongoose.Schema(
       type: Date,
       required: [true, "Password is required"],
     },
+    sessionId:{
+      type: String,
+      required: true,
+      unique: true
+    }
   },
   {
     timestamps: true,

@@ -1,5 +1,10 @@
 const jwt = require("jsonwebtoken");
 const { randomUUID } = require("crypto");
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require('path');
+
+
 const TokenModel = require('../model/token.js');
 const UserModel = require("../model/auth.js");
 
@@ -18,17 +23,18 @@ class Token {
       validateRefreshToken &&
       new Date(validateRefreshToken?.expiryAt) >= new Date() 
     ) {
-          const accessToken = jwt.sign(
-            {
-              uid: validateRefreshToken?.uid,
-              name : userData?.name,
-            },
-            this.privateKey,
-            {
-              expiresIn: this.accessTokenExpiry,
-            }
-          );
-          resp.data = accessToken;
+      const accessToken = jwt.sign(
+        {
+          uid: validateRefreshToken?.uid,
+          name : userData?.name,
+          session_id : sessionId
+        },
+        this.privateKey,
+        {
+          expiresIn: this.accessTokenExpiry,
+        }
+      );
+      resp.data = accessToken;
     } else {
       resp.status = false;
       resp.error ="refresh token is expired,please login again.";
@@ -49,11 +55,21 @@ class Token {
 
     const now = new Date();
     const createdAt=now;
-    const expiryAt =  (now).setDate(now.getDate() + refreshTokenExpiry);;
+    const expiryAt =  (now).setDate(now.getDate() + refreshTokenExpiry);
 
+    
+    const sessionId = crypto.randomBytes(16).toString('hex');
+    const sessionDir = path.join(__dirname, '../config/sessions');
+    const sessionFilePath = path.join(sessionDir, sessionId);
+    if (!fs.existsSync(sessionDir)){
+      fs.mkdirSync(sessionDir);
+    }
+    const fd = fs.openSync(sessionFilePath, 'w'); // Open the file
+    fs.closeSync(fd); // Close the file descriptor after opening
+    
     // generate new refresh token value using uuid function
     let refreshToken = randomUUID();
-    await TokenModel.create({uid,refreshToken,expiryAt});
+    await TokenModel.create({uid,refreshToken,expiryAt,sessionId});
     
     return refreshToken;
   }
