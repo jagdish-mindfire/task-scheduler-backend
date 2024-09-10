@@ -9,7 +9,7 @@ This is the backend of the Task Scheduling App, built with Node.js and Express. 
 - [Environment Variables](#environment-variables)
 - [Running the App](#running-the-app)
 - [Functionalities](#functionalities)
-- [API Documentaions](#api-documentations)
+- [API Documentation](#api-Documentation)
 
 ## Getting Started
 
@@ -62,8 +62,8 @@ node index.js
   * **Delete Task:** Users can delete tasks they no longer need.
 * **Authentication :** Users must be authenticated via a valid access token to create, edit, or delete tasks.
 
-## API Documentaions
-you can find the all api and the documentation in this link :
+## API Documentation
+you can access all api and the documentation from this link :
 
 ```bash
 https://documenter.getpostman.com/view/38224488/2sAXjSz9Ft
