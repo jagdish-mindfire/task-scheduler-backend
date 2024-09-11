@@ -147,7 +147,6 @@ exports.logout = asyncWrapper(async (req, res) => {
             httpResponse.message = 'successfully logout';
         }else{
             const userData = await TokenModel.findOne({refreshToken:refresh_token});
-            console.log(userData);
             if(userData){
                 await TokenModel.deleteMany({uid:userData.uid});
                 httpResponse.message = 'successfully logout';

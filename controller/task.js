@@ -66,7 +66,6 @@ exports.createTask = asyncWrapper(async (req, res) => {
 exports.getOneTask = asyncWrapper(async (req, res) => {
     const {taskId} = req.params;
     const taskDetails = await TaskModel.findOne({uid:req.uid,_id:taskId});
-    console.log(taskDetails);
     if(taskDetails){
         return res.status(200).json(taskDetails);
     }else{
