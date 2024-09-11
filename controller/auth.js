@@ -149,6 +149,10 @@ exports.logout = asyncWrapper(async (req, res) => {
                 await TokenModel.deleteOne({refreshToken:refresh_token});
                 await sessionHelper.deleteSessionId(userData?.sessionId);
             }else{
+                const allTokens = await TokenModel.find({uid:userData?.uid});
+                allTokens.map((token)=>{
+                    sessionHelper.deleteSessionId(token?.sessionId)
+                })
                 await TokenModel.deleteMany({uid:userData.uid});
             }
             httpResponse.message = 'successfully logout';
