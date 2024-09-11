@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const UserModel = require('../model/auth.js');
 const TokenModel = require("../model/token.js");
 const passwordHelper = require('../libs/password.js');
+const sessionHelper = require('../libs/session.js');
 const TOKEN_LIB = require("../libs/token.js");
 
 exports.signup = asyncWrapper(async (req, res, next) => {
@@ -142,19 +143,22 @@ exports.logout = asyncWrapper(async (req, res) => {
     }
 
     if (refresh_token) {
-        if(type === 'one'){
-            await TokenModel.deleteOne({refreshToken:refresh_token});
-            httpResponse.message = 'successfully logout';
-        }else{
-            const userData = await TokenModel.findOne({refreshToken:refresh_token});
-            if(userData){
-                await TokenModel.deleteMany({uid:userData.uid});
-                httpResponse.message = 'successfully logout';
+        const userData = await TokenModel.findOne({refreshToken:refresh_token});
+        if(userData){
+            if(type === 'one'){
+                await TokenModel.deleteOne({refreshToken:refresh_token});
+                await sessionHelper.deleteSessionId(userData?.sessionId);
             }else{
-                httpStatus = 400;
-                httpResponse.message = "Invalid refresh token"
+                await TokenModel.deleteMany({uid:userData.uid});
             }
+            httpResponse.message = 'successfully logout';
+
+        }else{
+            httpStatus = 400;
+            httpResponse.message = "Invalid refresh token"
         }
+
+        
     } else {
         httpStatus = 400;
         httpResponse.message = "Refresh token required"

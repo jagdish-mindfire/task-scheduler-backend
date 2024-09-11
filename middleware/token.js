@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
+const sessionHelper = require('../libs/session');
 
 const privateKey = process.env.JWT_PRIVATE_KEY;
 
@@ -16,11 +19,20 @@ const TokenMiddleware = async (req, res, next) => {
     if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(" ");
         const bearerToken = bearer[1];
-
         const result = Decode(bearerToken);
         if (result) {
-            req.uid = result.uid;
-            next();
+
+            const sessionId = result.session_id;
+            const sessionValidity = sessionHelper.checkSessionValidity(sessionId);
+            if(sessionValidity){
+                req.uid = result.uid;
+                next();
+            }else{
+                res.status(401).json({
+                    'error': "sessoin is expired."
+                });
+                return;
+            }
         } else {
             res.status(401).json({
                 'error': "Unauthorized access."

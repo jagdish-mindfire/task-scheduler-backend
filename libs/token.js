@@ -1,12 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { randomUUID } = require("crypto");
-const crypto = require("crypto");
-const fs = require("fs");
-const path = require('path');
-
 
 const TokenModel = require('../model/token.js');
 const UserModel = require("../model/auth.js");
+const sessionHelper = require('../libs/session.js');
 
 class Token {
   constructor() {
@@ -27,7 +24,7 @@ class Token {
         {
           uid: validateRefreshToken?.uid,
           name : userData?.name,
-          session_id : sessionId
+          session_id : validateRefreshToken?.sessionId
         },
         this.privateKey,
         {
@@ -57,21 +54,15 @@ class Token {
     const createdAt=now;
     const expiryAt =  (now).setDate(now.getDate() + refreshTokenExpiry);
 
-    
-    const sessionId = crypto.randomBytes(16).toString('hex');
-    const sessionDir = path.join(__dirname, '../config/sessions');
-    const sessionFilePath = path.join(sessionDir, sessionId);
-    if (!fs.existsSync(sessionDir)){
-      fs.mkdirSync(sessionDir);
-    }
-    const fd = fs.openSync(sessionFilePath, 'w'); // Open the file
-    fs.closeSync(fd); // Close the file descriptor after opening
-    
+    const session = await sessionHelper.generateSessionId();    
     // generate new refresh token value using uuid function
-    let refreshToken = randomUUID();
-    await TokenModel.create({uid,refreshToken,expiryAt,sessionId});
+    if(session.status){
+      let refreshToken = randomUUID();
+      await TokenModel.create({uid,refreshToken,expiryAt,sessionId:session.sessionId});
+      return refreshToken;
+    }
     
-    return refreshToken;
+    return false;
   }
 
   decode(accessToken) {
