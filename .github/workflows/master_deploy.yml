@@ -15,9 +15,6 @@ jobs:
     
     - name: Setting Environment Variables
       run: |
-        echo ${{secrets.JWT_PRIVATE_KEY}}
-        echo ${{vars.LISTEN_PORT}}
-        echo ${{secrets.SSH_KEY}}
         ############### SETTING ENV FILE STARTS ######################################################
         FILE_NAME=".env"
         echo "TZ='Asia/Kolkata'" > $FILE_NAME
