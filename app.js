@@ -1,6 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocs = require("./swagger-doc");
+
 require("./config/mongo-db");
 
 const globalErrorHandler = require("./middleware/globalErrorHandler.js");
@@ -14,6 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //Allowing All cors
 app.use(cors());
+
+//Swagger Documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 app.get("/", (req, res) => {
   res.send("Welcome To task Scheduler APIs");
