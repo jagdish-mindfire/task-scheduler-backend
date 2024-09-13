@@ -5,7 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./swagger-doc");
 
 require("./config/mongo-db");
-
+require("./cron/")
 const globalErrorHandler = require("./middleware/globalErrorHandler.js");
 
 global.asyncWrapper = require("./middleware/asyncWrapper.js");
