@@ -2,6 +2,11 @@
 
 This is the backend of the Task Scheduling App, built with Node.js and Express. It handles user authentication, task creation, editing, deletion, and notifications for tasks.
 
+## Deployed Link 
+```bash
+https://task-scheduler-api.chickenkiller.com
+```
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
@@ -66,5 +71,5 @@ node index.js
 you can access all api and the documentation from this link :
 
 ```bash
-https://documenter.getpostman.com/view/38224488/2sAXjSz9Ft
+https://task-scheduler-api.chickenkiller.com/api-docs/
 ```
