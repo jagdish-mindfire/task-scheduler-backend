@@ -108,6 +108,10 @@ exports.updateTask = asyncWrapper(async (req, res) => {
     }
 
     if(flag){
+        if(updateData.dueDate){
+            updateData.dueNotificationCount=0;
+            updateData.overDueNotificationCount=0;
+        }
         const updatedTask = await TaskModel.findOneAndUpdate({_id:taskId,uid:req.uid}, {$set:updateData},  {new: true});
         
         if(updatedTask){
