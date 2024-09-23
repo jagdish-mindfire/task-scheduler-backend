@@ -62,7 +62,7 @@ async function getOverDueTaks() {
     }
 }
 
-// Schedule cron job to run every 5 minutes
+// Schedule cron job to run every 2 minutes
 cron.schedule('*/2 * * * *',() => {
     checkDueTasks();
     getOverDueTaks();

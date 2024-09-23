@@ -34,7 +34,7 @@ app.use("/task", require('./routes/task.js'));
 
 app.use("/notification",require('./routes/notification.js'))
 
-app.get("/live-notifications",(req, res) => {
+app.get("/live-notifications",cors(),(req, res) => {
   const token = req.query.token;
   const decodedToken = jwt.decode(token);
   console.log(decodedToken);
