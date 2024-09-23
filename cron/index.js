@@ -41,9 +41,9 @@ async function getOverDueTaks() {
          * Getting All the tasks that exceeded the deadline.
          */
         const now = new Date();
-
+        
         const incompleteTasks = await TaskModel.find({ isCompleted:0, dueDate: { $lte:now } });
-
+        
         const notificationsToSend = [];
         for(let i=0;i<incompleteTasks.length;i++) {
             const task = incompleteTasks[i];
@@ -55,6 +55,7 @@ async function getOverDueTaks() {
         }
         if (notificationsToSend.length > 0) {
             // Emit an event with incomplete tasks data
+          
             taskEmitter.emit('incompleteTasksFound', notificationsToSend);
         }
     } catch (error) {
@@ -63,9 +64,10 @@ async function getOverDueTaks() {
 }
 
 // Schedule cron job to run every 2 minutes
-cron.schedule('*/2 * * * *',() => {
-    checkDueTasks();
-    getOverDueTaks();
+cron.schedule('*/5 * * * *',async () => {
+    console.log('running cron job');
+    await getOverDueTaks();
+    await checkDueTasks();
 });
 
 module.exports = taskEmitter;
