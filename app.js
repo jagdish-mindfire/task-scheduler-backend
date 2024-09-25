@@ -36,7 +36,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 app.get("/", (req, res) => {
-  res.send("Welcome To task Scheduler APIs");
+  res.json({message:"Welcome To task Scheduler APIs"});
 });
 
 app.use("/auth", require('./routes/auth.js'));
