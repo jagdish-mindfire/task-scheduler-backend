@@ -44,34 +44,6 @@ app.use("/task", require('./routes/task.js'));
 
 app.use("/notification",require('./routes/notification.js'))
 
-// app.get("/live-notifications",cors(),(req, res) => {
-//   const token = req.query.token;
-//   const decodedToken = jwt.decode(token);
-//   console.log(decodedToken);
-//   res.setHeader('Content-Type', 'text/event-stream');
-//   res.setHeader('Cache-Control', 'no-cache');
-//   res.setHeader('Connection', 'keep-alive');
-
-//   const sendTasks = (tasks) => {
-//     console.log(tasks);
-//     const tasksToSend = tasks.filter((task=>{
-//       return task.uid === decodedToken.uid;
-//     }));
-//     res.write(`data: ${JSON.stringify(tasksToSend)}\n\n`);
-// };
-
-// taskEmitter.on('incompleteTasksFound', sendTasks);
-
-//   req.on('close', () => {
-//         // taskEmitter.off('incompleteTasksFound', sendTasks);
-//         res.end();
-//     });
-
-// });
-
-
-//For sending notifications
-
 io.on("connection", async (socket) => {
   
   const token = socket.handshake.query?.token;

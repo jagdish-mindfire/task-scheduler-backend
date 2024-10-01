@@ -4,6 +4,7 @@ const TokenModel = require("../model/token.js");
 const passwordHelper = require('../libs/password.js');
 const sessionHelper = require('../libs/session.js');
 const TOKEN_LIB = require("../libs/token.js");
+const CONSTANT_STRINGS = require("../constants/strings.json");
 
 exports.signup = asyncWrapper(async (req, res, next) => {
     let {
@@ -18,32 +19,32 @@ exports.signup = asyncWrapper(async (req, res, next) => {
 
     if (!email) {
         flag = false;
-        message = "Email cannot be empty";
+        message = CONSTANT_STRINGS.EMAIL_CANNOT_BE_EMPTY;
     } else {
         email = email.toLowerCase().trim();
     }
 
     if (!name) {
         flag = false;
-        message = "name cannot be empty";
+        message = CONSTANT_STRINGS.NAME_CANNOT_BE_EMPTY;
     }
 
     if (!password) {
         flag = false;
-        message = "password cannot be empty";
+        message =CONSTANT_STRINGS.PASSWORD_CANNOT_BE_EMPTY;
     }
     if (flag) {
         const user = await UserModel.findOne({ email});
         if(user) {
-            message="It looks like you already have an account. Please log in to continue.";
+            message=CONSTANT_STRINGS.EMAIL_ALREADY_EXIST;
             return res.status(status).json({
                 message: message,
             });
         }else{
             const encryptedPassword = passwordHelper.encryptePassword(password)
             await UserModel.create({email,name,password:encryptedPassword});
-            status = 200;
-            message = "user created successfully!";
+            status = 201;
+            message = CONSTANT_STRINGS.USER_CREATED;
             return  res.status(status).json({message});
         }
     } else {
@@ -65,13 +66,13 @@ exports.login = asyncWrapper(async (req, res, next) => {
 
     if (!email) {
         flag = false;
-        message = "Email cannot be empty";
+        message = CONSTANT_STRINGS.EMAIL_CANNOT_BE_EMPTY;
     } else {
         email = email.toLowerCase().trim();
     }
     if (!password) {
         flag = false;
-        message = "password cannot be empty";
+        message = CONSTANT_STRINGS.PASSWORD_CANNOT_BE_EMPTY;
     }
 
     
@@ -83,16 +84,16 @@ exports.login = asyncWrapper(async (req, res, next) => {
                 const refreshToken = await Token.createRefreshToken({uid:user._id});
                 status=200;
                 return res.status(status).json({
-                    message:`You've successfully logged in!`,
+                    message:CONSTANT_STRINGS.SUCCESSFULLY_LOGGED_IN,
                     refresh_token: refreshToken,
                     name:user.name,
                 }); 
 
             }else{
-                message="The password you entered is incorrect. Please try again";
+                message=CONSTANT_STRINGS.INCORRECT_PASSWORD;
             }
         }else{
-            message="Account not found. Please sign up to create a new account";
+            message=CONSTANT_STRINGS.ACCOUNT_ALREADY_EXISTS;
         }
     }
     return res.status(status).json({

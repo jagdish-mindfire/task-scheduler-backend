@@ -1,0 +1,11 @@
+{
+    "EMAIL_CANNOT_BE_EMPTY" : "Email cannot be empty",
+    "NAME_CANNOT_BE_EMPTY" : "Name cannot be empty",
+    "PASSWORD_CANNOT_BE_EMPTY" : "Password cannot be empty",
+    "EMAIL_ALREADY_EXISTS" : "It looks like you already have an account. Please log in to continue.",
+    "USER_CREATED" : "user created successfully!",
+    "SUCCESSFULLY_LOGGED_IN" : "You've successfully logged in!",
+    "INCORRECT_PASSWORD":"The password you entered is incorrect. Please try again",
+    "ACCOUNT_ALREADY_EXISTS" : "Account not found. Please sign up to create a new account"
+
+}
