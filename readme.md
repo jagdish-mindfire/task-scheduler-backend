@@ -47,6 +47,7 @@ REFRESH_TOKEN_EXPIRY=10  #in days
 ACCESS_TOKEN_EXPIRY=150m
 JWT_PRIVATE_KEY=my-secret-key
 PORT=3000
+SALT_ROUNDS=11
 ```
 
 ## Running the App
