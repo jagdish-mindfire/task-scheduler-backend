@@ -4,7 +4,7 @@ const { randomUUID } = require("crypto");
 const TokenModel = require('../model/token.js');
 const UserModel = require("../model/auth.js");
 const sessionHelper = require('../libs/session.js');
-
+const CONSTANT_STRINGS = require('../constants/strings.json')
 class Token {
   constructor() {
     this.privateKey = process.env.JWT_PRIVATE_KEY;
@@ -34,7 +34,7 @@ class Token {
       resp.data = accessToken;
     } else {
       resp.status = false;
-      resp.error ="refresh token is expired,please login again.";
+      resp.error = CONSTANT_STRINGS.INVALID_REFRESH_TOKEN;
     }
     return resp;
   }

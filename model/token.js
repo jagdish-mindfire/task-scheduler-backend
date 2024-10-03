@@ -1,19 +1,20 @@
 const mongoose = require("mongoose");
+const CONSTANT_STRINGS = require("../constants/strings.json");
 
 const TokenSchema = mongoose.Schema(
   {
     uid: {
     type: String,
-    required: [true, "uid is required"],
+    required: [true, CONSTANT_STRINGS.UID_CANNOT_BE_EMPTY],
     },
     refreshToken: {
       type: String,
-      required: [true, "refresh token is required"],
+      required: [true, CONSTANT_STRINGS.REFRESH_TOKEN_REQUIRED],
       unique: true,
     },
     expiryAt: {
       type: Date,
-      required: [true, "Password is required"],
+      required: [true, CONSTANT_STRINGS.PASSWORD_CANNOT_BE_EMPTY],
     },
     sessionId:{
       type: String,

@@ -1,4 +1,5 @@
 const TaskModel = require('../model/task.js');
+const CONSTANT_STRINGS = require('../constants/strings.json');
 
 exports.getAllTasks = asyncWrapper(async (req, res) => {
     const { sort } = req.query; // Getting 'sort' from query params
@@ -20,7 +21,7 @@ exports.getAllTasks = asyncWrapper(async (req, res) => {
         });
     } else {
         return res.status(400).json({
-            message: 'there are no tasks'
+            message: CONSTANT_STRINGS.NO_TASK_FOUND
         });
     }
 });
@@ -38,18 +39,18 @@ exports.createTask = asyncWrapper(async (req, res) => {
 
     if (!title) {
         flag = false;
-        message = "title cannot be empty";
+        message = CONSTANT_STRINGS.TITLE_CANNOT_BE_EMPTY;
     }
 
     if (!description) {
         flag = false;
-        message = "description cannot be empty";
+        message = CONSTANT_STRINGS.DESCRIPTION_CANNOT_BE_EMPTY;
     }
 
     if (flag) {
         const createdTask = await TaskModel.create({uid:req.uid,title,description,dueDate:due_date});
 
-            message="Task Created Successfully";
+            message=CONSTANT_STRINGS.TASK_CREATED_SUCCESS;
             return res.status(200).json({
                 message: message,
                 task_id : createdTask._id,
@@ -70,7 +71,7 @@ exports.getOneTask = asyncWrapper(async (req, res) => {
         return res.status(200).json(taskDetails);
     }else{
         return res.status(400).json({
-            message : 'task not found'
+            message : CONSTANT_STRINGS.INVALID_TASK_ID
          });
     }
 });
@@ -89,7 +90,7 @@ exports.updateTask = asyncWrapper(async (req, res) => {
     let status=400;
     if(is_completed && (is_completed !== 0 && is_completed !== 1)){
         flag=false;
-        message='is completed can either be 0 or 1';
+        message=CONSTANT_STRINGS.INVLAID_FORMAT_OF_IS_COMPLETE;
     }
 
     // Create an empty update object
@@ -104,7 +105,7 @@ exports.updateTask = asyncWrapper(async (req, res) => {
     // If no update fields are provided.
     if (Object.keys(updateData).length === 0) {
         flag=false;
-        message= 'No fields to update provided';
+        message= CONSTANT_STRINGS.NO_FIELD_TO_UPDATE;
     }
 
     if(flag){
@@ -115,10 +116,10 @@ exports.updateTask = asyncWrapper(async (req, res) => {
         const updatedTask = await TaskModel.findOneAndUpdate({_id:taskId,uid:req.uid}, {$set:updateData},  {new: true});
         
         if(updatedTask){
-            message="Task Updated Successfully";
+            message=CONSTANT_STRINGS.TASK_UPDATED_SUCCESS;
             status=200;
         }else{
-            message="Task Not found";
+            message=CONSTANT_STRINGS.NO_TASK_FOUND;
         }
         return res.status(status).json({
             message: message,
@@ -138,11 +139,11 @@ exports.deleteTask = asyncWrapper(async (req, res) => {
     const taskDetails = await TaskModel.deleteOne({uid:req.uid,_id:taskId});
     if(taskDetails){
         return res.status(200).json({
-           message:"task deleted successfully"
+           message:CONSTANT_STRINGS.TASK_DELETE_SUCCESS
         });
     }else{
         return res.status(400).json({
-            message : 'task not found'
+            message : CONSTANT_STRINGS.TASK_DELETE_SUCCESS
          });
     }
 

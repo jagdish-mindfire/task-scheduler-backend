@@ -6,6 +6,31 @@
     "USER_CREATED" : "user created successfully!",
     "SUCCESSFULLY_LOGGED_IN" : "You've successfully logged in!",
     "INCORRECT_PASSWORD":"The password you entered is incorrect. Please try again",
-    "ACCOUNT_ALREADY_EXISTS" : "Account not found. Please sign up to create a new account"
+    "ACCOUNT_ALREADY_EXISTS" : "Account not found. Please sign up to create a new account",
+    "REFRESH_TOKEN_REQUIRED" : "Refresh Token required",
+    "INVALID_REFRESH_TOKEN" : "Invalid Refresh Token",
+    "LOGOUT_SUCCESS" : "You have successfully logged out",
+    "SOMETHING_WENT_WRONG" : "Something went wrong",
+    
+    "NOTIFICATION_NOT_FOUND" : "Notification not found",
+    "NOTIFICATION_UPDATED_SUCCESS":"Notification Updated Successfully",
+    "INVALID_DATA" : "Invalid body data",
+    "NOTIFICATION_DELETE_SUCCESS" : "Notification Deleted Successfully",
+
+    "NO_TASK_FOUND":"There are no tasks",
+    "TITLE_CANNOT_BE_EMPTY" : "Title cannot be empty",
+    "DESCRIPTION_CANNOT_BE_EMPTY" : "Description cannot be empty",
+    "TASK_CREATED_SUCCESS":"Task Created Successfully",
+    "INVALID_TASK_ID" : "Invalid task id",
+    "INVLAID_FORMAT_OF_IS_COMPLETE":"is completed can either be 0 or 1",
+    "NO_FIELD_TO_UPDATE":"No fields to update provided",
+    "TASK_UPDATED_SUCCESS":"Task Updated Successfully",
+    "TASK_DELETE_SUCCESS":"Task Deleted Successfully",
+
+    "INTERNAL_SERVER_ERROR": "Internal Server Error",
+    "SESSION_EXPIRED": "Session expired",
+    "UNAUTHORIZED_ACCESS": "Unauthorized access.",
+    "UID_CANNOT_BE_EMPTY":"uid cannot be empty"
+
 
 }

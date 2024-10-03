@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
 
-describe('For General App', () => {
+describe('For App', () => {
     it('should return 200 for GET /', async () => {
       const res = await request(app).get('/');
       expect(res.statusCode).toBe(200);

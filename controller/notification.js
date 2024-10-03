@@ -1,4 +1,5 @@
 const NotificationModel = require('../model/notification.js');
+const CONSTANT_STRINGS = require('../constants/strings.json');
 
 exports.getAllNotifications = asyncWrapper(async (req, res) => {
     console.log(req.uid)
@@ -58,9 +59,9 @@ exports.markNotificationRead = asyncWrapper(async (req, res) => {
     const updatedNotification = await NotificationModel.findOneAndUpdate({_id:notificationId,uid:req.uid}, {$set:{isRead:1}},  {new: true});
     let status = 200;
     if(updatedNotification){
-        message="Notification Updated Successfully";
+        message=CONSTANT_STRINGS.NOTIFICATION_UPDATED_SUCCESS;
     }else{
-        message="Notification Not found";
+        message=CONSTANT_STRINGS.NOTIFICATION_NOT_FOUND;
     }
     return res.status(status).json({
         message: message,
@@ -76,7 +77,7 @@ exports.deleteNotifications = asyncWrapper(async (req, res) => {
         // Ensure notificationIds is an array and uid is a valid string
     if (!Array.isArray(notificationIds)) {
         return res.status(400).json({
-            message: "Invalid request data. 'notificationIds' is an array."
+            message: CONSTANT_STRINGS.INVALID_DATA
         });
     }
 
@@ -85,9 +86,9 @@ exports.deleteNotifications = asyncWrapper(async (req, res) => {
 
     let status = 200;
     if(result){
-        message="Notification Deleted Successfully";
+        message=CONSTANT_STRINGS.NOTIFICATION_DELETE_SUCCESS;
     }else{
-        message="Notification Not found";
+        message=CONSTANT_STRINGS.NOTIFICATION_NOT_FOUND;
     }
     return res.status(status).json({
         message: message,

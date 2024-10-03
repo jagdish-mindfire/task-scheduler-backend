@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
 const sessionHelper = require('../libs/session');
+const CONSTANT_STRINGS = require('../constants/strings.json');
 
 const privateKey = process.env.JWT_PRIVATE_KEY;
 
@@ -29,18 +30,18 @@ const TokenMiddleware = async (req, res, next) => {
                 next();
             }else{
                 res.status(401).json({
-                    'error': "sessoin is expired."
+                    'error': CONSTANT_STRINGS.SESSION_EXPIRED
                 });
                 return;
             }
         } else {
             res.status(401).json({
-                'error': "Unauthorized access."
+                'error': CONSTANT_STRINGS.UNAUTHORIZED_ACCESS
             });
         }
     } else {
         res.status(401).json({
-            'error': "Unauthorized access."
+            'error': CONSTANT_STRINGS.UNAUTHORIZED_ACCESS
         });
     }
 

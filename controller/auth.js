@@ -126,7 +126,7 @@ exports.refreshToken = asyncWrapper(async (req, res) => {
      else {
         res.status(400).json({
             message: 
-                "Refresh token is required"
+                CONSTANT_STRINGS.REFRESH_TOKEN_REQUIRED
         });
     }
 });
@@ -156,21 +156,21 @@ exports.logout = asyncWrapper(async (req, res) => {
                 })
                 await TokenModel.deleteMany({uid:userData.uid});
             }
-            httpResponse.message = 'successfully logout';
+            httpResponse.message = '';
 
         }else{
             httpStatus = 400;
-            httpResponse.message = "Invalid refresh token"
+            httpResponse.message = CONSTANT_STRINGS.INVALID_REFRESH_TOKEN;
         }
 
         
     } else {
         httpStatus = 400;
-        httpResponse.message = "Refresh token required"
+        httpResponse.message = CONSTANT_STRINGS.LOGOUT_SUCCESS;
     }
 
     if (!httpResponse.message) {
-        httpResponse.message = "Something went wrong."
+        httpResponse.message = CONSTANT_STRINGS.SOMETHING_WENT_WRONG;
     }
     return res.status(httpStatus).json(httpResponse);
 
