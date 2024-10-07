@@ -38,7 +38,7 @@ jobs:
     - name: Coping Files to Server
       run: |
         ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "sudo rm -rf task-scheduler-backend && sudo mkdir -p task-scheduler-backend"
-        sudo tar --exclude=".git*" --exclude="id_rsa" --exclude="*.yml" -cf - . | ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "sudo tar -C task-scheduler-backend -xf -"
+        sudo tar --exclude=".git*" --exclude="id_rsa" -cf - . | ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "sudo tar -C task-scheduler-backend -xf -"
         
     - name: Build and Deploy with Docker Compose
       run: |
