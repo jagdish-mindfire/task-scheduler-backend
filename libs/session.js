@@ -1,14 +1,7 @@
 const crypto = require('crypto');
-const Redis = require('redis');
 const CONSTANT_STRINGS = require('../constants/strings.json');
 
-const redisClient = Redis.createClient();
-redisClient.on('error', (err) => console.log('Redis Client Error', err));
-
-(async () => {
-    await redisClient.connect();
-})();
-
+const redisClient = require('../config/redis');
 
 
 async function generateSessionId() {
