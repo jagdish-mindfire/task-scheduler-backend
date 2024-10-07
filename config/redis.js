@@ -1,6 +1,6 @@
 const Redis = require('redis');
 
-const redisClient = Redis.createClient({host:'172.17.0.1', port: 6379});
+const redisClient = Redis.createClient({host:'redis-server', port: 6379});
 
 
 (async () => {
