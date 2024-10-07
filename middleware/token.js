@@ -22,9 +22,8 @@ const TokenMiddleware = async (req, res, next) => {
         const bearerToken = bearer[1];
         const result = Decode(bearerToken);
         if (result) {
-
             const sessionId = result.session_id;
-            const sessionValidity = sessionHelper.checkSessionValidity(sessionId);
+            const sessionValidity = await sessionHelper.checkSessionValidity(sessionId);
             if(sessionValidity){
                 req.uid = result.uid;
                 next();

@@ -19,6 +19,7 @@ class Token {
     if (
       validateRefreshToken &&
       new Date(validateRefreshToken?.expiryAt) >= new Date() 
+      && await sessionHelper.checkSessionValidity(validateRefreshToken?.sessionId)
     ) {
       const accessToken = jwt.sign(
         {
