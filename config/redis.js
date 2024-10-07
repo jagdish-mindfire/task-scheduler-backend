@@ -1,7 +1,6 @@
 const Redis = require('redis');
 
-//Running redis server on a docker container in the same machine
-const redisClient = Redis.createClient({host:'redis-server', port: 6379});
+const redisClient = Redis.createClient({host:'172.31.9.240', port: 6379});
 
 
 (async () => {
