@@ -3,7 +3,7 @@ name: Prod API Deployment
 on:
   push:
     branches:
-    - master
+      - master
 
 jobs:
   deploy:
@@ -21,11 +21,9 @@ jobs:
         echo "PORT=${{vars.LISTEN_PORT}}" >> $FILE_NAME
         echo "REFRESH_TOKEN_EXPIRY=${{vars.REFRESH_TOKEN_EXPIRY}}" >> $FILE_NAME
         echo "ACCESS_TOKEN_EXPIRY=${{vars.ACCESS_TOKEN_EXPIRY}}" >> $FILE_NAME
-
         echo "MONGO_DB_STRING=${{secrets.MONGO_DB_STRING}}" >> $FILE_NAME
         echo "JWT_PRIVATE_KEY=${{secrets.JWT_PRIVATE_KEY}}" >> $FILE_NAME
         echo "SALT_ROUNDS=11" >> $FILE_NAME
-        
         ############### SETTING ENV FILE END ######################################################
 
     - name: SSH Connection
@@ -41,7 +39,12 @@ jobs:
       run: |
         ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "sudo rm -rf task-scheduler-backend && sudo mkdir -p task-scheduler-backend"
         sudo tar --exclude=".git*" --exclude="id_rsa" --exclude="*.yml" -cf - . | ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "sudo tar -C task-scheduler-backend -xf -"
-        ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "docker build --rm -t task-scheduler-backend-image task-scheduler-backend/"
-        ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "docker stop task-scheduler-backend || true"
-        ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "docker run  -p 3000:3000 --rm --name task-scheduler-backend -dt task-scheduler-backend-image"
+        
+    - name: Build and Deploy with Docker Compose
+      run: |
+        ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "cd task-scheduler-backend && docker-compose down || true"
+        ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "cd task-scheduler-backend && docker-compose up -d --build"
+        
+    - name: Clean up Docker
+      run: |
         ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "docker system prune -f"
