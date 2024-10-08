@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: process.env.ENVIRONMENT === "local" ? "*" : "https://boisterous-frangipane-9f323a.netlify.app",
   },
 });
 
