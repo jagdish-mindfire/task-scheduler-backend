@@ -24,6 +24,7 @@ jobs:
         echo "MONGO_DB_STRING=${{secrets.MONGO_DB_STRING}}" >> $FILE_NAME
         echo "JWT_PRIVATE_KEY=${{secrets.JWT_PRIVATE_KEY}}" >> $FILE_NAME
         echo "SALT_ROUNDS=11" >> $FILE_NAME
+        echo "FRONTEND_URL=http://boisterous-frangipane-9f323a.netlify.app" >> $FILE_NAME
         ############### SETTING ENV FILE END ######################################################
 
     - name: SSH Connection
