@@ -1,29 +1,12 @@
 const TaskModel = require('../model/task.js');
 const CONSTANT_STRINGS = require('../constants/strings.json');
+const TaskService = require('../services/task');
 
 exports.getAllTasks = asyncWrapper(async (req, res) => {
     const { sort } = req.query; // Getting 'sort' from query params
-
-    let query = TaskModel.find({ uid: req.uid });
-
-    // Check if 'sort' param is passed, and apply sorting based on 'dueDate'
-    if (sort === 'asc') {
-        query = query.sort({ dueDate: 1 });  // Ascending order
-    } else if (sort === 'desc') {
-        query = query.sort({ dueDate: -1 }); // Descending order
-    }
-
-    const allTasks = await query;
-
-    if (allTasks && allTasks.length > 0) {
-        return res.status(200).json({
-            tasks: allTasks
-        });
-    } else {
-        return res.status(400).json({
-            message: CONSTANT_STRINGS.NO_TASK_FOUND
-        });
-    }
+    const {data,statusCode} = await TaskService.getAllTasks({uid:req.uid,sort});
+    return res.status(statusCode).json(data);
+    
 });
 
 exports.createTask = asyncWrapper(async (req, res) => {
@@ -33,7 +16,7 @@ exports.createTask = asyncWrapper(async (req, res) => {
         due_date,
     } = req.body;
 
-    let status = 400;
+    let statusCode = 400;
     let flag = true;
     let message = "";
 
@@ -48,31 +31,23 @@ exports.createTask = asyncWrapper(async (req, res) => {
     }
 
     if (flag) {
-        const createdTask = await TaskModel.create({uid:req.uid,title,description,dueDate:due_date});
-
-            message=CONSTANT_STRINGS.TASK_CREATED_SUCCESS;
-            return res.status(200).json({
-                message: message,
-                task_id : createdTask._id,
-                task : createdTask,
-            });
+        const {message,statusCode,task_id,task} = await TaskService.createTask({uid:req.uid,title,description,dueDate:due_date});
+        return res.status(statusCode).json({message,task_id,task});
     } else {
-        res.status(status).json({
-            message: message,
-        });
+        res.status(statusCode).json({message});
     }
 
 });
 
 exports.getOneTask = asyncWrapper(async (req, res) => {
     const {taskId} = req.params;
-    const taskDetails = await TaskModel.findOne({uid:req.uid,_id:taskId});
-    if(taskDetails){
-        return res.status(200).json(taskDetails);
-    }else{
-        return res.status(400).json({
-            message : CONSTANT_STRINGS.INVALID_TASK_ID
+    const {isError,errorMessage,statusCode,task} = await TaskService.getTask({uid:req.uid,taskId});
+    if(isError){
+        return res.status(statusCode).json({
+            message : errorMessage
          });
+    }else{
+       return res.status(statusCode).json({task});
     }
 });
 
@@ -87,7 +62,7 @@ exports.updateTask = asyncWrapper(async (req, res) => {
     } = req.body;
 
     let flag = true;
-    let status=400;
+    let statusCode=400;
     if(is_completed && (is_completed !== 0 && is_completed !== 1)){
         flag=false;
         message=CONSTANT_STRINGS.INVLAID_FORMAT_OF_IS_COMPLETE;
@@ -113,38 +88,18 @@ exports.updateTask = asyncWrapper(async (req, res) => {
             updateData.dueNotificationCount=0;
             updateData.overDueNotificationCount=0;
         }
-        const updatedTask = await TaskModel.findOneAndUpdate({_id:taskId,uid:req.uid}, {$set:updateData},  {new: true});
+        const {statusCode,message} = await TaskService.updateTask({uid:req.uid,taskId,dataToUpdate:updateData});
         
-        if(updatedTask){
-            message=CONSTANT_STRINGS.TASK_UPDATED_SUCCESS;
-            status=200;
-        }else{
-            message=CONSTANT_STRINGS.NO_TASK_FOUND;
-        }
-        return res.status(status).json({
-            message: message,
-            task:updatedTask
-        });
+        return res.status(statusCode).json({message});
     }else{
-        res.status(400).json({
-            message: message,
-        });
+        res.status(statusCode).json({message});
     }
 
 });
 
 exports.deleteTask = asyncWrapper(async (req, res) => {
-
     const {taskId} = req.params;
-    const taskDetails = await TaskModel.deleteOne({uid:req.uid,_id:taskId});
-    if(taskDetails){
-        return res.status(200).json({
-           message:CONSTANT_STRINGS.TASK_DELETE_SUCCESS
-        });
-    }else{
-        return res.status(400).json({
-            message : CONSTANT_STRINGS.TASK_DELETE_SUCCESS
-         });
-    }
+    const {statusCode,message} = await TaskService.deleteTask({uid:req.uid,taskId});
+    return res.status(statusCode).json({message});
 
 });
