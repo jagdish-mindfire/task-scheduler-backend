@@ -1,72 +1,16 @@
 const NotificationModel = require('../model/notification.js');
 const CONSTANT_STRINGS = require('../constants/strings.json');
+const NotificationService = require('../services/notification');
 
 exports.getAllNotifications = asyncWrapper(async (req, res) => {
-    console.log(req.uid)
-    let allNotifications = await NotificationModel.aggregate([
-        {
-            $match: { uid: req.uid } 
-        },
-        {
-            $addFields: {
-                taskIdObject: { $toObjectId: "$taskId" } // Convert taskId string to ObjectId
-            }
-        },
-        {
-            $lookup: {
-                from: "tasks", 
-                localField: "taskIdObject", 
-                foreignField: "_id", 
-                as: "taskDetails"
-            }
-        },
-        {
-            $unwind: "$taskDetails" // Flatten the array created by $lookup
-        },
-        {
-            $addFields: {
-                title: "$taskDetails.title" ,
-              	dueDate : "$taskDetails.dueDate",
-            }
-        },
-        {
-            $sort: { createdAt: -1 } // Sort in descending order of createdAt
-        },
-        {
-            $project: {
-                _id: 1,
-              	notificationType:1,
-              	isRead:1,
-              	title:1,
-              	dueDate:1,
-              taskId:1,
-              createdAt:1,
-              updatedAt:1
-               
-            }
-        }
-    ]);
-
-    return res.status(200).json(allNotifications);
+    const {statusCode,notifications} = await NotificationService.getAllNotifications({uid:req.uid});
+    return res.status(statusCode).json(notifications);
 });
 
-
-
 exports.markNotificationRead = asyncWrapper(async (req, res) => {
-
     const {notificationId} = req.params;
-
-    const updatedNotification = await NotificationModel.findOneAndUpdate({_id:notificationId,uid:req.uid}, {$set:{isRead:1}},  {new: true});
-    let status = 200;
-    if(updatedNotification){
-        message=CONSTANT_STRINGS.NOTIFICATION_UPDATED_SUCCESS;
-    }else{
-        message=CONSTANT_STRINGS.NOTIFICATION_NOT_FOUND;
-    }
-    return res.status(status).json({
-        message: message,
-        task:updatedNotification
-    });
+    const {statusCode,message} = await NotificationService.markNotificationAsRead({uid:req.uid,notificationId});
+    return res.status(statusCode).json({message});
 
 });
 
@@ -81,18 +25,7 @@ exports.deleteNotifications = asyncWrapper(async (req, res) => {
         });
     }
 
-        
-    const result = await NotificationModel.deleteMany({ uid: req.uid, _id: { $in: notificationIds } });
-
-    let status = 200;
-    if(result){
-        message=CONSTANT_STRINGS.NOTIFICATION_DELETE_SUCCESS;
-    }else{
-        message=CONSTANT_STRINGS.NOTIFICATION_NOT_FOUND;
-    }
-    return res.status(status).json({
-        message: message,
-    });
-
+    const {statusCode,message} = await NotificationService.deleteNotifications({uid:req.uid,notificationIds})
+    return res.status(statusCode).json({message});
 });
 

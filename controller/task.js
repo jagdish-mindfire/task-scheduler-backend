@@ -1,4 +1,3 @@
-const TaskModel = require('../model/task.js');
 const CONSTANT_STRINGS = require('../constants/strings.json');
 const TaskService = require('../services/task');
 
