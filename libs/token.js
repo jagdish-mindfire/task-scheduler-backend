@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { randomUUID } = require("crypto");
 
 const TokenModel = require('../model/token.js');
-const UserModel = require("../model/auth.js");
+const UserModel = require("../model/user.js");
 const sessionHelper = require('../libs/session.js');
 const CONSTANT_STRINGS = require('../constants/strings.json')
 class Token {

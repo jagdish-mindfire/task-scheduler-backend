@@ -64,10 +64,12 @@ async function getOverDueTaks() {
 }
 
 // Schedule cron job to run every 2 minutes
-cron.schedule('*/5 * * * *',async () => {
+
+if(process.env.ENVIRONMENT !== 'local'){
+    cron.schedule('*/5 * * * *',async () => {
     console.log('running cron job');
     await getOverDueTaks();
     await checkDueTasks();
 });
-
+}
 module.exports = taskEmitter;

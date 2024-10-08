@@ -2,3 +2,4 @@
 .env
 /config/sessions
 /coverage/
+*.log

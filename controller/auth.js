@@ -1,10 +1,5 @@
-const bcrypt = require('bcrypt');
-const UserModel = require('../model/auth.js');
-const TokenModel = require("../model/token.js");
-const passwordHelper = require('../libs/password.js');
-const sessionHelper = require('../libs/session.js');
-const TOKEN_LIB = require("../libs/token.js");
 const CONSTANT_STRINGS = require("../constants/strings.json");
+const UserService = require("../services/user.js");
 
 exports.signup = asyncWrapper(async (req, res, next) => {
     let {
@@ -13,9 +8,9 @@ exports.signup = asyncWrapper(async (req, res, next) => {
         password,
     } = req.body;
 
-    let status = 400;
+    let statusCode = 400;
     let flag = true;
-    let message = "";
+    let message;
 
     if (!email) {
         flag = false;
@@ -34,24 +29,11 @@ exports.signup = asyncWrapper(async (req, res, next) => {
         message =CONSTANT_STRINGS.PASSWORD_CANNOT_BE_EMPTY;
     }
     if (flag) {
-        const user = await UserModel.findOne({ email});
-        if(user) {
-            message=CONSTANT_STRINGS.EMAIL_ALREADY_EXIST;
-            return res.status(status).json({
-                message: message,
-            });
-        }else{
-            const encryptedPassword = passwordHelper.encryptePassword(password)
-            await UserModel.create({email,name,password:encryptedPassword});
-            status = 201;
-            message = CONSTANT_STRINGS.USER_CREATED;
-            return  res.status(status).json({message});
-        }
-    } else {
-        res.status(status).json({
-            message: message,
-        });
+        const serviceResponse = await UserService.signup({email,name,password});
+        statusCode = serviceResponse.statusCode;
+        message = serviceResponse.message;
     }
+    return res.status(statusCode).json({message});
 });
 
 exports.login = asyncWrapper(async (req, res, next) => {
@@ -60,7 +42,7 @@ exports.login = asyncWrapper(async (req, res, next) => {
         password,
     } = req.body;
 
-    let status = 400;
+    let statusCode = 400;
     let flag = true;
     let message = "";
 
@@ -77,64 +59,35 @@ exports.login = asyncWrapper(async (req, res, next) => {
 
     
     if (flag) {
-        const user = await UserModel.findOne({email});
-        if(user){
-            if(await bcrypt.compare(password, user?.password)){
-                const Token = new TOKEN_LIB();
-                const refreshToken = await Token.createRefreshToken({uid:user._id});
-                status=200;
-                return res.status(status).json({
-                    message:CONSTANT_STRINGS.SUCCESSFULLY_LOGGED_IN,
-                    refresh_token: refreshToken,
-                    name:user.name,
-                }); 
-
-            }else{
-                message=CONSTANT_STRINGS.INCORRECT_PASSWORD;
-            }
-        }else{
-            message=CONSTANT_STRINGS.ACCOUNT_ALREADY_EXISTS;
-        }
+        const {statusCode,message,refresh_token,name} = await UserService.login({email,password});
+        return res.status(statusCode).json({message,refresh_token,name});
     }
-    return res.status(status).json({
-        message: message,
-    });
+    return res.status(statusCode).json({message});
 });
 
 exports.refreshToken = asyncWrapper(async (req, res) => {
     const {
         refresh_token,
     } = req.body;
-    if (refresh_token ) {
-        const token = new TOKEN_LIB();
-        
-        const accessToken = await token.accessToken({
-            refreshToken: refresh_token,
-        });
-        if (accessToken.status) {
-            res.json({
-                access_token: accessToken.data,
-            });
-        } else {
-            res.status(400).json({
-                message: accessToken.error,
-            });
+    let responseStatusCode=400;
+    const response = {};
+    if (refresh_token) {
+        const {isError,errorMessage,statusCode,access_token} = await UserService.refreshToken({refresh_token});
+        responseStatusCode = statusCode;
+        if(!isError){
+            response.access_token = access_token;
+        }else{
+            response.message = errorMessage;
         }
-
+    }else{
+        response.message = CONSTANT_STRINGS.REFRESH_TOKEN_REQUIRED;
     }
-     
-     else {
-        res.status(400).json({
-            message: 
-                CONSTANT_STRINGS.REFRESH_TOKEN_REQUIRED
-        });
-    }
+    res.status(responseStatusCode).json(response);
 });
 
 exports.logout = asyncWrapper(async (req, res) => {
-
-    let httpStatus = 200;
-    let httpResponse = {};
+    let responseStatusCode = 400;
+    const response = {};
 
     let { refresh_token,type } = req.body;
     if(type && type.toLowerCase() === 'all'){
@@ -144,35 +97,16 @@ exports.logout = asyncWrapper(async (req, res) => {
     }
 
     if (refresh_token) {
-        const userData = await TokenModel.findOne({refreshToken:refresh_token});
-        if(userData){
-            if(type === 'one'){
-                await TokenModel.deleteOne({refreshToken:refresh_token});
-                await sessionHelper.deleteSessionId(userData?.sessionId);
-            }else{
-                const allTokens = await TokenModel.find({uid:userData?.uid});
-                allTokens.map((token)=>{
-                    sessionHelper.deleteSessionId(token?.sessionId)
-                })
-                await TokenModel.deleteMany({uid:userData.uid});
-            }
-            httpResponse.message = '';
-
+        const {isError,errorMessage,message,statusCode} = await UserService.logout({refresh_token,type});
+        responseStatusCode = statusCode;
+        if(!isError){
+            response.message = message;
         }else{
-            httpStatus = 400;
-            httpResponse.message = CONSTANT_STRINGS.INVALID_REFRESH_TOKEN;
+            response.message = errorMessage;
         }
-
-        
     } else {
-        httpStatus = 400;
-        httpResponse.message = CONSTANT_STRINGS.LOGOUT_SUCCESS;
+        response.message = CONSTANT_STRINGS.REFRESH_TOKEN_REQUIRED;
     }
-
-    if (!httpResponse.message) {
-        httpResponse.message = CONSTANT_STRINGS.SOMETHING_WENT_WRONG;
-    }
-    return res.status(httpStatus).json(httpResponse);
-
+    return res.status(responseStatusCode).json(response);
 });
 

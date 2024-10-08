@@ -6,7 +6,7 @@
     "USER_CREATED": "Account created successfully! Welcome aboard.",
     "SUCCESSFULLY_LOGGED_IN": "You're now logged in! Welcome back.",
     "INCORRECT_PASSWORD": "The password you entered is incorrect. Please try again.",
-    "ACCOUNT_ALREADY_EXISTS": "We couldn't find an account with this email. Please sign up.",
+    "ACCOUNT_DOEN_NOT_EXISTS": "We couldn't find an account with this email. Please sign up.",
     "REFRESH_TOKEN_REQUIRED": "A refresh token is required to proceed.",
     "INVALID_REFRESH_TOKEN": "The refresh token is invalid. Please try again.",
     "LOGOUT_SUCCESS": "You've successfully logged out. See you again soon!",
@@ -31,6 +31,9 @@
     "SESSION_EXPIRED": "Your session has expired. Please log in again.",
     "UNAUTHORIZED_ACCESS": "You don't have permission to access this.",
     "UID_CANNOT_BE_EMPTY": "User ID is required to continue.",
+
+    "INVALID_SEARCH_CRITERIA" : "Invalid search criteria",
+    "INVALID_REQUEST" : "Invalid request",
     
     "SESSION_PREFIX": "SESSION"
 }
