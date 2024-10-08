@@ -25,6 +25,7 @@ jobs:
         echo "JWT_PRIVATE_KEY=${{secrets.JWT_PRIVATE_KEY}}" >> $FILE_NAME
         echo "SALT_ROUNDS=11" >> $FILE_NAME
         echo "FRONTEND_URL=https://boisterous-frangipane-9f323a.netlify.app" >> $FILE_NAME
+        echo "REDIS_URL=redis://redis:6379" >> $FILE_NAME
         ############### SETTING ENV FILE END ######################################################
 
     - name: SSH Connection

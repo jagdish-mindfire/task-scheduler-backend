@@ -61,15 +61,10 @@ io.on("connection", async (socket) => {
   };
 
   taskEmitter.on('incompleteTasksFound', sendTasks);
-  
-  // socket.on("disconnect", async () => {
-    
-  // });
 });
 
 
 // Global Error Handler
-
 app.use(globalErrorHandler);
 
 module.exports = server;
