@@ -1,4 +1,5 @@
 const NotificationRepository = require('../repository/notification')
+const CONSTANT_STRINGS = require('../constants/strings.json');
 
 exports.getAllNotifications = async ({uid}) => {
     const notifications =  await NotificationRepository.getAllNotifications({uid})

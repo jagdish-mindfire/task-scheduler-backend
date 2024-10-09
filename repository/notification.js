@@ -1,4 +1,5 @@
 const NotificationModel = require('../model/notification')
+const CONSTANT_STRINGS = require('../constants/strings.json');
 
 exports.getAllNotifications = async ({uid}) => {
     return await NotificationModel.aggregate([
