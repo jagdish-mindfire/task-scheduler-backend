@@ -1,10 +1,10 @@
 const CONSTANT_STRINGS = require("../constants/strings.json");
 const UserRepository = require("../repository/user");
 const TokenRepository = require("../repository/token");
-const passwordHelper = require('../libs/password');
+const passwordHelper = require('../utils/password');
 const bcrypt = require('bcrypt');
-const TOKEN_LIB = require("../libs/token.js");
-const sessionHelper = require("../libs/session");
+const TOKEN_LIB = require("../utils/token.js");
+const sessionHelper = require("../utils/session");
 
 exports.signup = async ({email,name,password}) => {
     const response = {statusCode : 201,message:CONSTANT_STRINGS.USER_CREATED};

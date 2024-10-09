@@ -1,4 +1,3 @@
-const NotificationModel = require('../model/notification.js');
 const CONSTANT_STRINGS = require('../constants/strings.json');
 const NotificationService = require('../services/notification');
 
@@ -18,7 +17,7 @@ exports.deleteNotifications = asyncWrapper(async (req, res) => {
 
     const {notificationIds} = req.body;
 
-        // Ensure notificationIds is an array and uid is a valid string
+    // Ensure notificationIds is an array and uid is a valid string
     if (!Array.isArray(notificationIds)) {
         return res.status(400).json({
             message: CONSTANT_STRINGS.INVALID_DATA

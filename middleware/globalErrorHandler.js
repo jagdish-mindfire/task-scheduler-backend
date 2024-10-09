@@ -1,5 +1,5 @@
 const CONSTANT_STRINGS = require('../constants/strings.json');
-const logger = require('../libs/logger');
+const logger = require('../utils/logger');
 
 const globalErrorHandler = async (err, req, res, next) => {
     logger.error(err);

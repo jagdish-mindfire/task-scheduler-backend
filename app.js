@@ -42,9 +42,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", require('./routes/auth.js'));
-app.use("/task", require('./routes/task.js'));
+app.use("/tasks", require('./routes/task.js'));
 
-app.use("/notification",require('./routes/notification.js'))
+app.use("/notifications",require('./routes/notification.js'))
 
 io.on("connection", async (socket) => {
   

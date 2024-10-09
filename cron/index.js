@@ -5,6 +5,7 @@ const NotificationModel = require('../model/notification.js');
 
 // Create an event emitter instance
 const taskEmitter = new EventEmitter();
+taskEmitter.setMaxListeners(500);
 
 // Function to check for incomplete tasks
 async function checkDueTasks() {
@@ -63,7 +64,7 @@ async function getOverDueTaks() {
     }
 }
 
-// Schedule cron job to run every 2 minutes
+// Schedule cron job to run every 5 minutes
 
 if(process.env.ENVIRONMENT !== 'local'){
     cron.schedule('*/5 * * * *',async () => {

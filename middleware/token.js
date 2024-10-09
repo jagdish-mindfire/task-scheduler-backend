@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
-const sessionHelper = require('../libs/session');
+const sessionHelper = require('../utils/session');
 const CONSTANT_STRINGS = require('../constants/strings.json');
 
 const privateKey = process.env.JWT_PRIVATE_KEY;
