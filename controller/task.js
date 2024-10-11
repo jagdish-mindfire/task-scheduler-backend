@@ -87,9 +87,9 @@ exports.updateTask = asyncWrapper(async (req, res) => {
             updateData.dueNotificationCount=0;
             updateData.overDueNotificationCount=0;
         }
-        const {statusCode,message} = await TaskService.updateTask({uid:req.uid,taskId,dataToUpdate:updateData});
+        const {statusCode,message,task} = await TaskService.updateTask({uid:req.uid,taskId,dataToUpdate:updateData});
         
-        return res.status(statusCode).json({message});
+        return res.status(statusCode).json({message,task});
     }else{
         res.status(statusCode).json({message});
     }

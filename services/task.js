@@ -39,6 +39,8 @@ exports.updateTask = async ({taskId,uid,dataToUpdate}) => {
     if(!updatedTask){
         response.statusCode = 400;
         response.message = CONSTANT_STRINGS.TASK_NOT_FOUND;
+    }else{
+        response.task = updatedTask;
     }
     return response;
 };
