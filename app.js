@@ -2,17 +2,17 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocs = require("./swagger-doc");
 const jwt = require('jsonwebtoken');
 const socketIo = require("socket.io");
 const http = require("http");
+const swaggerDocs = require("./swagger-doc");
 
 require("./config/mongo-db");
 const taskEmitter = require("./cron/");
 
-// Middleware to parse JSON and urlencoded request bodies
 const globalErrorHandler = require("./middleware/global-error-handler.js");
 
+// Making asyncWrapper Global
 global.asyncWrapper = require("./middleware/async-wrapper.js");
 
 const app = express();
@@ -30,7 +30,6 @@ const io = socketIo(server, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//Allowing All cors
 app.use(cors());
 
 //Swagger Documentation
@@ -43,7 +42,6 @@ app.get("/", (req, res) => {
 
 app.use("/auth", require('./routes/auth.route.js'));
 app.use("/tasks", require('./routes/task.route.js'));
-
 app.use("/notifications",require('./routes/notification.route.js'));
 
 io.on("connection", async (socket) => {

@@ -17,7 +17,7 @@ exports.createTask = asyncWrapper(async (req, res) => {
     } = createTaskSchema.parse(req.body);
 
     const {message,task_id,task} = await taskService.createTask({uid:req.uid,title,description,dueDate:due_date});
-    return res.json({message,task_id,task});
+    return res.status(201).json({message,task_id,task});
 });
 
 exports.getOneTask = asyncWrapper(async (req, res) => {
