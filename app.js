@@ -11,9 +11,9 @@ require("./config/mongo-db");
 const taskEmitter = require("./cron/");
 
 // Middleware to parse JSON and urlencoded request bodies
-const globalErrorHandler = require("./middleware/globalErrorHandler.js");
+const globalErrorHandler = require("./middleware/global-error-handler.js");
 
-global.asyncWrapper = require("./middleware/asyncWrapper.js");
+global.asyncWrapper = require("./middleware/async-wrapper.js");
 
 const app = express();
 
@@ -41,10 +41,10 @@ app.get("/", (req, res) => {
   res.json({message:"Welcome To task Scheduler APIs"});
 });
 
-app.use("/auth", require('./routes/auth.js'));
-app.use("/tasks", require('./routes/task.js'));
+app.use("/auth", require('./routes/auth.route.js'));
+app.use("/tasks", require('./routes/task.route.js'));
 
-app.use("/notifications",require('./routes/notification.js'))
+app.use("/notifications",require('./routes/notification.route.js'));
 
 io.on("connection", async (socket) => {
   

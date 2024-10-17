@@ -16,7 +16,6 @@ module.exports = [
     rules: {
       'hub/vars-camelcase': 'error',
       'hub/class-pascalcase': 'error',
-      'hub/file-kebabcase': 'error',
       'hub/function-camelcase': 'error',
       'hub/function-descriptive': 'warn',
     },

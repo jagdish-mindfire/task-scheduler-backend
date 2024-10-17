@@ -1,12 +1,12 @@
 
-const taskController = require("../controller/task.js");
+const taskController = require("../controller/task.controller.js");
 const tokenMiddleware = require("../middleware/token.js");
 
 const express = require("express");
 const router = express.Router();
 
 
-router.use('/', tokenMiddleware.TokenMiddleware)
+router.use('/', tokenMiddleware.authMiddleware)
 
 router.get('/', taskController.getAllTasks);
 router.post('/create', taskController.createTask);

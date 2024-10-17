@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const CONSTANT_STRINGS = require('../constants/strings.json');
+const constantStrings = require('../constants/strings');
 
 const redisClient = require('../config/redis');
 
@@ -9,7 +9,7 @@ async function generateSessionId() {
     const response = { status: true };
     try {
         const sessionId = crypto.randomBytes(12).toString('hex') + new Date().getTime();
-        await redisClient.set(`${CONSTANT_STRINGS.SESSION_PREFIX}:${sessionId}`, 1, {
+        await redisClient.set(`${constantStrings.SESSION_PREFIX}:${sessionId}`, 1, {
             EX: process.env.REFRESH_TOKEN_EXPIRY * 24 *60 *60 
         });
         response.sessionId = sessionId;
@@ -22,7 +22,7 @@ async function generateSessionId() {
 
 async function deleteSessionId(sessionId) {
     try {
-        redisClient.del(`${CONSTANT_STRINGS.SESSION_PREFIX}:${sessionId}`);
+        redisClient.del(`${constantStrings.SESSION_PREFIX}:${sessionId}`);
         return true;
     } catch (error) {
         console.log(error);
@@ -32,7 +32,7 @@ async function deleteSessionId(sessionId) {
 
 async function checkSessionValidity(sessionId){
     try {
-        const isValid = await redisClient.get(`${CONSTANT_STRINGS.SESSION_PREFIX}:${sessionId}`);
+        const isValid = await redisClient.get(`${constantStrings.SESSION_PREFIX}:${sessionId}`);
         if (isValid) {
             return true;
         }

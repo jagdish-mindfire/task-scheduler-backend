@@ -1,10 +1,12 @@
 const jwt = require("jsonwebtoken");
 const { randomUUID } = require("crypto");
 
-const TokenModel = require('../model/token.js');
-const UserModel = require("../model/user.js");
+const tokenModel = require('../model/token.model.js');
+const userModel = require("../model/user.model.js");
 const sessionHelper = require('../utils/session.js');
-const CONSTANT_STRINGS = require('../constants/strings.json')
+const constantStrings = require('../constants/strings.js');
+const { APIError } = require("./custom-errors.js");
+const constantErrors = require("../constants/errors.js");
 class Token {
   constructor() {
     this.privateKey = process.env.JWT_PRIVATE_KEY;
@@ -12,10 +14,8 @@ class Token {
     this.refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY;
   }
   async accessToken({ refreshToken }) {
-    const resp = { status: true };
-
-    const validateRefreshToken = await TokenModel.findOne({refreshToken});
-    const userData = await UserModel.findOne({_id:validateRefreshToken?.uid});
+    const validateRefreshToken = await tokenModel.findOne({refreshToken});
+    const userData = await userModel.findOne({_id:validateRefreshToken?.uid});
     if (
       validateRefreshToken &&
       new Date(validateRefreshToken?.expiryAt) >= new Date() 
@@ -32,12 +32,10 @@ class Token {
           expiresIn: this.accessTokenExpiry,
         }
       );
-      resp.data = accessToken;
+      return accessToken;
     } else {
-      resp.status = false;
-      resp.error = CONSTANT_STRINGS.INVALID_REFRESH_TOKEN;
+      throw new APIError(constantErrors.INVALID_REFRESH_TOKEN);
     }
-    return resp;
   }
  
 
@@ -59,7 +57,7 @@ class Token {
     // generate new refresh token value using uuid function
     if(session.status){
       let refreshToken = randomUUID();
-      await TokenModel.create({uid,refreshToken,expiryAt,sessionId:session.sessionId});
+      await tokenModel.create({uid,refreshToken,expiryAt,sessionId:session.sessionId});
       return refreshToken;
     }
     

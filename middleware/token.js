@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
 const sessionHelper = require('../utils/session');
-const CONSTANT_STRINGS = require('../constants/strings.json');
+const constantStrings = require('../constants/strings');
 
 const privateKey = process.env.JWT_PRIVATE_KEY;
 
-const  Decode = (accessToken) => {
+const  decode = (accessToken) => {
     try {
         const decoded = jwt.verify(accessToken, privateKey);
         return decoded;
@@ -15,12 +15,12 @@ const  Decode = (accessToken) => {
     }
 }
 
-const TokenMiddleware = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
     if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(" ");
         const bearerToken = bearer[1];
-        const result = Decode(bearerToken);
+        const result = decode(bearerToken);
         if (result) {
             const sessionId = result.session_id;
             const sessionValidity = await sessionHelper.checkSessionValidity(sessionId);
@@ -29,20 +29,20 @@ const TokenMiddleware = async (req, res, next) => {
                 next();
             }else{
                 res.status(401).json({
-                    'error': CONSTANT_STRINGS.SESSION_EXPIRED
+                    'error': constantStrings.SESSION_EXPIRED
                 });
                 return;
             }
         } else {
             res.status(401).json({
-                'error': CONSTANT_STRINGS.UNAUTHORIZED_ACCESS
+                'error': constantStrings.UNAUTHORIZED_ACCESS
             });
         }
     } else {
         res.status(401).json({
-            'error': CONSTANT_STRINGS.UNAUTHORIZED_ACCESS
+            'error': constantStrings.UNAUTHORIZED_ACCESS
         });
     }
 
 };
-module.exports = {TokenMiddleware,Decode};
+module.exports = {authMiddleware,decode};

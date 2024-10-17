@@ -1,8 +1,7 @@
-const NotificationModel = require('../model/notification')
-const CONSTANT_STRINGS = require('../constants/strings.json');
+const notificationModel = require('../model/notification.model')
 
 exports.getAllNotifications = async ({uid}) => {
-    return await NotificationModel.aggregate([
+    return await notificationModel.aggregate([
         {
             $match: {uid} 
         },
@@ -47,10 +46,14 @@ exports.getAllNotifications = async ({uid}) => {
     ]);
 };
 
-exports.markNotificationAsRead = async ({notificationId,uid}) => {
-    return await NotificationModel.findOneAndUpdate({_id:notificationId,uid}, {$set:{isRead:1}},  {new: true});
+exports.markNotificationAsRead = async ({notificationIds,uid}) => {
+    return await notificationModel.updateMany(
+        { _id: { $in: notificationIds }, uid },
+        { $set: { isRead: 1 } },                
+        { new: true }               
+    );
 }
 
 exports.deleteNotifications = async ({notificationIds,uid}) => {
-    return await NotificationModel.deleteMany({ uid, _id: { $in: notificationIds } });
+    return await notificationModel.deleteMany({ uid, _id: { $in: notificationIds } });
 }

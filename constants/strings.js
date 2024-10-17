@@ -1,0 +1,50 @@
+const constantStrings = {
+    EMAIL_CANNOT_BE_EMPTY: "Please enter your email address.",
+    NAME_CANNOT_BE_EMPTY: "Your name is required. Please provide it.",
+    PASSWORD_CANNOT_BE_EMPTY: "Don't forget to enter your password.",
+    EMAIL_ALREADY_EXISTS: "An account with this email already exists. Please log in.",
+    USER_CREATED: "Account created successfully! Welcome aboard.",
+    SUCCESSFULLY_LOGGED_IN: "You're now logged in! Welcome back.",
+    INCORRECT_PASSWORD: "The password you entered is incorrect. Please try again.",
+    ACCOUNT_DOEN_NOT_EXISTS: "We couldn't find an account with this email. Please sign up.",
+    REFRESH_TOKEN_REQUIRED: "A refresh token is required to proceed.",
+    INVALID_REFRESH_TOKEN: "The refresh token is invalid. Please try again.",
+    LOGOUT_SUCCESS: "You've successfully logged out. See you again soon!",
+    SOMETHING_WENT_WRONG: "Oops, something went wrong. Please try again later.",
+    
+    NOTIFICATION_NOT_FOUND: "No notifications found.",
+    NOTIFICATION_UPDATED_SUCCESS: "Notification updated successfully!",
+    INVALID_DATA: "There was an issue with the information provided. Please check and try again.",
+    NOTIFICATION_DELETE_SUCCESS: "Notification deleted successfully.",
+    NO_TASK_FOUND: "No tasks available at the moment.",
+    INVALID_NOTIFICATION_ID:"Invalid Notification Id",
+    NOTIFICATION_IDS_CANNOT_BE_EMPTY : "Notification ids cannot be empty.",
+
+    TASK_CREATED_SUCCESS: "Task created successfully!",
+    INVALID_TASK_ID: "The task ID is invalid.",
+    INVALID_FORMAT_OF_IS_COMPLETE: "'isComplete' should either be 0 or 1.",
+    NO_FIELD_TO_UPDATE: "No updates provided. Please make sure to send the fields you want to change.",
+    TASK_UPDATED_SUCCESS: "Task updated successfully!",
+    TASK_DELETE_SUCCESS: "Task deleted successfully.",
+    TASK_NOT_FOUND: "Task not found.",
+    INTERNAL_SERVER_ERROR: "We're experiencing technical difficulties. Please try again later.",
+    SESSION_EXPIRED: "Your session has expired. Please log in again.",
+    UNAUTHORIZED_ACCESS: "You don't have permission to access this.",
+    UID_CANNOT_BE_EMPTY: "User ID is required to continue.",
+    INVALID_SEARCH_CRITERIA : "Invalid search criteria",
+    INVALID_REQUEST : "Invalid request",
+    SESSION_PREFIX: "SESSION",
+    PASSWORD_MIN_LENGTH: "Password must be at least 8 characters long",
+
+    TASK_TITLE_MIN_LENGTH : 'Please provide a title for the task.',
+    TASK_TITLE_MAX_LENGTH : 'The title exceeds the maximum length',
+    TASK_DESCRIPTION_MIN_LENGTH : 'Please provide a description for the task',
+    TASK_DESCRIPTION_MAX_LENGTH : 'The description exceeds the maximum length',
+    DUE_DATE_CANNOT_BE_EMPTY:'Please provide a due date for the task',
+
+    INVALID_COMPLETED_STATUS:'Invalid completed status',
+    NO_NOTIFICATION_FOUND:'No notification Found',
+
+};
+
+module.exports = constantStrings;

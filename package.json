@@ -19,7 +19,8 @@
     "redis": "^4.7.0",
     "socket.io": "^4.8.0",
     "swagger-ui-express": "^5.0.1",
-    "winston": "^3.15.0"
+    "winston": "^3.15.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@mindfiredigital/eslint-plugin-hub": "^1.8.1",
