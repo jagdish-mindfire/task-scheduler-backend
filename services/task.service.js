@@ -9,7 +9,7 @@ exports.getAllTasks = async ({uid,sort}) => {
     if(allTasks && allTasks.length === 0){
         throw new APIError(constantErrors.NO_TASK_FOUND);
     }
-    return response;
+    return {data:allTasks};
 };
 
 exports.getTask = async ({uid,taskId}) => {

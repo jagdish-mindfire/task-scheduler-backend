@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const path = require('path');
-const fs = require('fs');
 const sessionHelper = require('../utils/session');
 const constantStrings = require('../constants/strings');
+const { APIError } = require('../utils/custom-errors');
+const constantErrors = require('../constants/errors');
 
 const privateKey = process.env.JWT_PRIVATE_KEY;
 
@@ -15,7 +15,7 @@ const  decode = (accessToken) => {
     }
 }
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = asyncWrapper(async (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
     if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(" ");
@@ -28,21 +28,14 @@ const authMiddleware = async (req, res, next) => {
                 req.uid = result.uid;
                 next();
             }else{
-                res.status(401).json({
-                    'error': constantStrings.SESSION_EXPIRED
-                });
-                return;
+                throw new APIError(constantErrors.SESSION_EXPIRED);
             }
         } else {
-            res.status(401).json({
-                'error': constantStrings.UNAUTHORIZED_ACCESS
-            });
+            throw new APIError(constantErrors.UNAUTHORIZED_ACCESS);
         }
     } else {
-        res.status(401).json({
-            'error': constantStrings.UNAUTHORIZED_ACCESS
-        });
+        throw new APIError(constantErrors.UNAUTHORIZED_ACCESS);
     }
 
-};
+});
 module.exports = {authMiddleware,decode};
