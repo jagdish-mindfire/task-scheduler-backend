@@ -4,7 +4,7 @@ const { APIError } = require('../utils/custom-errors');
 const {getAllTaskSchema,createTaskSchema,updateTaskSchema,deleteTaskSchema} = require('../validation-schema/task.schema');
 
 exports.getAllTasks = asyncWrapper(async (req, res) => {
-    const {sort} = getAllTaskSchema.parse(req.params);
+    const {sort} = getAllTaskSchema.parse(req.query);
     const {data} = await taskService.getAllTasks({uid:req.uid,sort});
     return res.json(data);
 });
