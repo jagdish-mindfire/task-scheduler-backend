@@ -13,11 +13,11 @@ const signupSchema = z.object({
 });
 
 const refreshTokenSchema = z.object({
-    refresh_token : z.string({required_error:constantStrings.REFRESH_TOKEN_REQUIRED}).min(1,{message:constantStrings.INVALID_REFRESH_TOKEN})
+    refreshToken : z.string({required_error:constantStrings.REFRESH_TOKEN_REQUIRED}).min(1,{message:constantStrings.INVALID_REFRESH_TOKEN})
 });
 
 const logoutSchema = z.object({
-    refresh_token: z.string(constantStrings.REFRESH_TOKEN_REQUIRED),
+    refreshToken: z.string(constantStrings.REFRESH_TOKEN_REQUIRED),
     type: z
         .string()
         .optional()

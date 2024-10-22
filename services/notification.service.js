@@ -8,7 +8,7 @@ exports.getAllNotifications = async ({uid}) => {
     if(!notifications || !notifications?.length){
         throw new APIError(constantErrors.NOTIFICATION_NOT_FOUND)
     }
-    return {notifications};
+    return notifications;
 };
 
 exports.markNotificationAsRead = async ({uid,notificationIds}) => {

@@ -15,8 +15,8 @@ const  decode = (accessToken) => {
     }
 }
 
-const authMiddleware = asyncWrapper(async (req, res, next) => {
-    const bearerHeader = req.headers['authorization'];
+const getUidFromHeader = async (context) => {
+    const bearerHeader = context.req.headers['authorization'];
     if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(" ");
         const bearerToken = bearer[1];
@@ -25,8 +25,7 @@ const authMiddleware = asyncWrapper(async (req, res, next) => {
             const sessionId = result.session_id;
             const sessionValidity = await sessionHelper.checkSessionValidity(sessionId);
             if(sessionValidity){
-                req.uid = result.uid;
-                next();
+                return result.uid;
             }else{
                 throw new APIError(constantErrors.SESSION_EXPIRED);
             }
@@ -37,5 +36,5 @@ const authMiddleware = asyncWrapper(async (req, res, next) => {
         throw new APIError(constantErrors.UNAUTHORIZED_ACCESS);
     }
 
-});
-module.exports = {authMiddleware,decode};
+};
+module.exports = {getUidFromHeader,decode};

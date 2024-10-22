@@ -1,9 +1,8 @@
-const app = require("./app");
+const server = require("./app");
 
 let port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
-});
 
-module.exports = app;
+server.listen({ port }).then((res) => {
+    console.log(`Server ready at ${res.url}`);
+});

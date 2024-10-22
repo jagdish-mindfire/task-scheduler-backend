@@ -29,7 +29,7 @@ exports.login = async ({email,password}) => {
                 const token = new TOKEN_LIB();
                 const refreshToken = await token.createRefreshToken({uid:user._id});
 
-                response.refresh_token = refreshToken;
+                response.refreshToken = refreshToken;
                 response.name = user.name;
             }else{
                 throw new APIError(constantErrors.INCORRECT_PASSWORD);
