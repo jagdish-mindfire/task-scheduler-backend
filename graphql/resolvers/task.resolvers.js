@@ -6,7 +6,16 @@ const { APIError } = require('../../utils/custom-errors');
 exports.getAllTasks = asyncWrapper(async (_, args, context, info) => {
     const {sort} = getAllTaskSchema.parse(args);
     const {data} = await taskService.getAllTasks({uid:context.uid,sort});
-    return data;
+    return data.map(task => ({
+        _id: task._id.toString(),
+        title: task.title,
+        description: task.description,
+        isCompleted: !!task.isCompleted, 
+        dueDate: task.dueDate.toISOString(), 
+        createdAt: task.createdAt.toISOString(),
+        updatedAt: task.updatedAt.toISOString(),
+      }));
+
 })
 
 exports.createTask = asyncWrapper(async (_, args, context, info) => {
