@@ -41,7 +41,8 @@ exports.updateTask = asyncWrapper(async (req, res) => {
     if (title) updateData.title = title;
     if (description) updateData.description = description;
     if (due_date) updateData.dueDate = due_date;
-    if (is_completed) updateData.isCompleted = is_completed;
+    if (typeof is_completed !== 'undefined') updateData.isCompleted = is_completed;
+
 
     // If no update fields are provided.
     if (Object.keys(updateData).length === 0) {
