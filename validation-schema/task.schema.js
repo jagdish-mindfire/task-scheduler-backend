@@ -10,21 +10,21 @@ const getAllTaskSchema =  z.object({
 
 const createTaskSchema = z.object({
     title: z
-        .string({required_error : constantStrings.TASK_TITLE_MIN_LENGTH})
+        .string({ required_error: constantStrings.TASK_TITLE_MIN_LENGTH })
         .min(1, constantStrings.TASK_TITLE_MIN_LENGTH)
         .max(100, constantStrings.TASK_TITLE_MAX_LENGTH),
     description: z
-        .string({required_error : constantStrings.TASK_DESCRIPTION_MIN_LENGTH})
+        .string({ required_error: constantStrings.TASK_DESCRIPTION_MIN_LENGTH })
         .min(1, constantStrings.TASK_DESCRIPTION_MIN_LENGTH)
-        .max(1000, constantStrings.TASK_DESCRIPTION_MAX_LENGTH),
-    due_date:z
-    .string({required_error : constantStrings.DUE_DATE_CANNOT_BE_EMPTY})
-    .regex(
-        /^\d{4}-\d{2}-\d{2}$/, 
-        { message: constantStrings.DUE_DATE_CANNOT_BE_EMPTY } 
-    )
-    .transform((dateStr) => new Date(dateStr))
+        .max(1000, constantStrings.TASK_DESCRIPTION_MAX_LENGTH)
+        .optional(),
+    due_date: z
+        .string({ required_error: constantStrings.DUE_DATE_CANNOT_BE_EMPTY })
+        .regex(/^\d{4}-\d{2}-\d{2}$/, { message: constantStrings.DUE_DATE_CANNOT_BE_EMPTY })
+        .transform((dateStr) => new Date(dateStr))
+        .optional(),
 });
+
 
 const updateTaskSchema = z.object({
     title: z

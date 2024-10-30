@@ -7,11 +7,11 @@ const TaskSchema = mongoose.Schema(
       required: true,
     },
     title: { type: String, required: true },
-    description: { type: String },
-    dueDate: { type: Date ,required: true},
-    isCompleted: { type: Number, default: 0},
-    dueNotificationCount: { type: Number, default: 0},
-    overDueNotificationCount: { type: Number, default: 0},
+    description: { type: String },  // optional
+    dueDate: { type: Date },  // optional
+    isCompleted: { type: Number, default: 0 },  // optional, with default value
+    dueNotificationCount: { type: Number, default: 0 },  // optional, with default value
+    overDueNotificationCount: { type: Number, default: 0 },  // optional, with default value
   },
   { timestamps: true }
 );
