@@ -34,6 +34,8 @@ exports.updateTask = asyncWrapper(async (req, res) => {
         description,
         due_date,
         is_completed,
+        boardColumnId,
+        boardPosition,
     } = updateTaskSchema.parse(req.body);
 
     let updateData = {};
@@ -41,8 +43,11 @@ exports.updateTask = asyncWrapper(async (req, res) => {
     if (title) updateData.title = title;
     if (description) updateData.description = description;
     if (due_date) updateData.dueDate = due_date;
+    if (typeof boardColumnId !== 'undefined') updateData.boardColumnId = boardColumnId;
+    if (typeof boardPosition !== 'undefined') updateData.boardPosition = boardPosition;
     if (typeof is_completed !== 'undefined') updateData.isCompleted = is_completed;
 
+    console.log(updateData);
 
     // If no update fields are provided.
     if (Object.keys(updateData).length === 0) {

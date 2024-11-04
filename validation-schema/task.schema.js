@@ -54,6 +54,8 @@ const updateTaskSchema = z.object({
             message: constantStrings.INVALID_COMPLETED_STATUS,
         })
         .optional(),
+    boardColumnId : z.number().optional(),
+    boardPosition  : z.number().optional(),
 });
 
 const deleteTaskSchema = z.object({
