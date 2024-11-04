@@ -67,3 +67,9 @@ exports.logout = async ({refresh_token,type}) => {
             throw new APIError(constantErrors.INVALID_REFRESH_TOKEN);
         }
 };
+
+
+exports.getUserDetails = async ({uid}) => {
+    const user = await userRepository.findUesrDetails({uid});
+    return user;
+};

@@ -12,6 +12,9 @@ const TaskSchema = mongoose.Schema(
     isCompleted: { type: Number, default: 0 },  // optional, with default value
     dueNotificationCount: { type: Number, default: 0 },  // optional, with default value
     overDueNotificationCount: { type: Number, default: 0 },  // optional, with default value
+    priority: { type: Number, default: 0 },  // optional, with default value
+    boardPosition: { type: Number, default: 0 }, // optional, with default value
+    boardColumnId: { type: Number, default: 0 }, // optional, with default value
   },
   { timestamps: true }
 );

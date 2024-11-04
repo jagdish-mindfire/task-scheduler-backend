@@ -41,6 +41,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", require('./routes/auth.route.js'));
+app.use("/user", require('./routes/user.route.js'));
 app.use("/tasks", require('./routes/task.route.js'));
 app.use("/notifications",require('./routes/notification.route.js'));
 
