@@ -8,7 +8,7 @@ const http = require("http");
 const swaggerDocs = require("./swagger-doc");
 
 require("./config/mongo-db");
-const taskEmitter = require("./cron/");
+const taskEmitter = require("./jobs/");
 
 const globalErrorHandler = require("./middleware/global-error-handler.js");
 
