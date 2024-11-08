@@ -23,12 +23,8 @@ exports.deleteTask = async ({uid,taskId}) => {
     return await taskModel.deleteOne({uid,_id:taskId}); 
 };
 
-exports.updateTask = async ({ taskId, uid, dataToUpdate }) => {
-  return await taskModel.findOneAndUpdate(
-    { _id: taskId, uid },
-    { $set: { ...dataToUpdate } },
-    { new: true, session }
-  );
+exports.updateTask = async ({taskId,uid,dataToUpdate}) => {
+  return await taskModel.findOneAndUpdate({_id:taskId,uid}, {$set:dataToUpdate},  {new: true});
+};
 
-  };
   
