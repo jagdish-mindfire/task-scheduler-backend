@@ -64,36 +64,38 @@ exports.updateTask = async ({ taskId, uid, dataToUpdate }) => {
 
     // Case 1: Moving to a different column
     if (newColumnId !== undefined && newColumnId !== currentColumnId) {
-      // Shift down positions in original column
+      // Shift down positions in the original column
       await taskModel.updateMany(
-        { uid, boardColumnId: currentColumnId, boardPosition: { $gte: currentPosition } },
+        { uid, boardColumnId: currentColumnId, boardPosition: { $gt: currentPosition } },
         { $inc: { boardPosition: -1 } },
         { session }
       );
 
-      // Shift up in target column
+      // Shift up positions in the target column to make space
       await taskModel.updateMany(
         { uid, boardColumnId: newColumnId, boardPosition: { $gte: newPosition } },
         { $inc: { boardPosition: 1 } },
         { session }
       );
 
-      // Update the task
+      // Update the task with the new column and position
       await taskModel.findOneAndUpdate(
         { _id: taskId, uid },
-        { $set: { boardColumnId: newColumnId, boardPosition: newPosition } },
+        { $set: dataToUpdate },
         { new: true, session }
       );
 
+    // Case 2: Changing position within the same column
     } else if (newPosition !== undefined && newPosition !== currentPosition) {
-      // Update within the same column
       if (newPosition > currentPosition) {
+        // Moving task down, shift other tasks up
         await taskModel.updateMany(
           { uid, boardColumnId: currentColumnId, boardPosition: { $gt: currentPosition, $lte: newPosition } },
           { $inc: { boardPosition: -1 } },
           { session }
         );
       } else {
+        // Moving task up, shift other tasks down
         await taskModel.updateMany(
           { uid, boardColumnId: currentColumnId, boardPosition: { $gte: newPosition, $lt: currentPosition } },
           { $inc: { boardPosition: 1 } },
@@ -101,16 +103,26 @@ exports.updateTask = async ({ taskId, uid, dataToUpdate }) => {
         );
       }
 
-      // Update the task with new position
+      // Update the task with the new position
       await taskModel.findOneAndUpdate(
         { _id: taskId, uid },
-        { $set: { boardPosition: newPosition } },
+        { $set: dataToUpdate },
+        { new: true, session }
+      );
+      
+    // Case 3: No position or column change - just update other fields
+    } else {
+      await taskModel.findOneAndUpdate(
+        { _id: taskId, uid },
+        { $set: dataToUpdate },
         { new: true, session }
       );
     }
 
     await session.commitTransaction();
     session.endSession();
+    
+    // Return the updated task
     return await taskModel.findOne({ _id: taskId, uid });
   } catch (error) {
     await session.abortTransaction();
